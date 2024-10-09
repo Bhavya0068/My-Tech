@@ -1,177 +1,282 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MyTech Solutions - Dashboard</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-  <style>
-    .bg-gradient {
-      background: linear-gradient(90deg, #4338ca, #3b82f6);
-    }
-    .transition-transform {
-      transition: transform 0.3s ease-in-out;
-    }
-    .hover-scale:hover {
-      transform: scale(1.05);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyTech Solutions - Advanced Employee Management</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        .bg-gradient {
+            background: linear-gradient(135deg, #4f46e5, #3b82f6, #06b6d4);
+        }
+        .transition-transform {
+            transition: transform 0.3s ease-in-out;
+        }
+        .hover-scale:hover {
+            transform: scale(1.05);
+        }
+        .slide-in-bottom {
+            animation: slideInBottom 0.5s ease-out;
+        }
+        @keyframes slideInBottom {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .modal {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal-content {
+            transition: transform 0.3s ease-in-out;
+        }
+        .modal.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal.show .modal-content {
+            transform: translateY(0);
+        }
+    </style>
 </head>
 <body class="bg-gray-100 font-sans">
-  <header class="bg-gradient text-white p-4 shadow-md">
-    <div class="container mx-auto flex flex-col sm:flex-row items-center justify-between">
-      <div class="flex items-center mb-4 sm:mb-0">
-        <img src="mytech.png" alt="Company Logo" class="w-12 h-12 mr-4 rounded-full bg-white p-1">
-        <h1 class="text-2xl font-bold">MyTech Solutions</h1>
-      </div>
-      <div id="auth-buttons" class="flex flex-col sm:flex-row">
-        <button onclick="showLoginPage()" class="bg-white text-indigo-600 py-2 px-4 rounded-md hover:bg-indigo-100 transition duration-300 mb-2 sm:mb-0 sm:mr-2">Login</button>
-        <button onclick="showSignupPage()" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-400 transition duration-300">Sign Up</button>
-      </div>
-    </div>
-  </header>
-
-  <div id="main-page" class="container mx-auto mt-20 max-w-md px-4">
-    <div class="bg-white p-8 rounded-lg shadow-md text-center">
-      <h2 class="text-2xl font-bold mb-6 text-indigo-600">Welcome to MyTech Solutions</h2>
-      <p class="mb-6">Please login or sign up to continue.</p>
-      <button onclick="showLoginPage()" class="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-300 mr-4">Login</button>
-      <button onclick="showSignupPage()" class="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">Sign Up</button>
-    </div>
-  </div>
-
-  <div id="login-page" class="container mx-auto mt-20 max-w-md px-4 hidden">
-    <div class="bg-white p-8 rounded-lg shadow-md">
-      <h2 class="text-2xl font-bold mb-6 text-indigo-600">Login</h2>
-      <form id="loginForm">
-        <div class="mb-4">
-          <label for="username" class="block text-gray-700 font-bold mb-2">Username:</label>
-          <input type="text" id="username" placeholder="Enter username" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-300">
+    <header class="bg-gradient text-white p-4 shadow-md ">
+        <div class="container mx-auto flex flex-col sm:flex-row items-center justify-between">
+            <div class="flex items-center mb-4 sm:mb-0">
+                <img src="mytech.png" alt="Company Logo" class="w-12 h-12 mr-4 rounded-full bg-white p-1">
+                <h1 class="text-2xl font-bold">MyTech Solutions</h1>
+            </div>
+            <nav id="main-nav" class="hidden sm:flex space-x-4">
+                <!-- <a href="#" class="hover:text-indigo-200 transition duration-300">Dashboard</a>
+                <a href="manageTeams" class="hover:text-indigo-200 transition duration-300">Teams</a>
+                <a href="viewAttendance" class="hover:text-indigo-200 transition duration-300">Attendance</a>
+                <a href="assignTask" class="hover:text-indigo-200 transition duration-300">Tasks</a>
+                <a href="generateReport" class="hover:text-indigo-200 transition duration-300">Reports</a> -->
+            </nav>
+            <div id="auth-buttons" class="flex">
+                <button onclick="showLoginPage()" class="bg-white text-indigo-600 py-2 px-4 rounded-md hover:bg-indigo-100 transition duration-300 mr-2">Login</button>
+                <button onclick="showSignupPage()" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-400 transition duration-300">Sign Up</button>
+            </div>
+            <button id="logout-button" class="hidden bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition duration-300" onclick="logout()">Logout</button>
         </div>
-        <div class="mb-4">
-          <label for="password" class="block text-gray-700 font-bold mb-2">Password:</label>
-          <input type="password" id="password" placeholder="Enter password" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-300">
-        </div>
-        <div class="mb-6">
-          <label for="role" class="block text-gray-700 font-bold mb-2">Role:</label>
-          <select id="role" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-300">
-            <option value="admin">Admin</option>
-            <option value="employee">Employee</option>
-          </select>
-        </div>
-        <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-300">Login</button>
-      </form>
-      <p id="login-message" class="mt-4 text-red-500 text-center"></p>
-    </div>
-  </div>
+    </header>
 
-  <div id="signup-page" class="container mx-auto mt-20 max-w-md px-4 hidden">
-    <div class="bg-white p-8 rounded-lg shadow-md">
-      <h2 class="text-2xl font-bold mb-6 text-indigo-600">Sign Up</h2>
-      <form id="signupForm">
-        <div class="mb-4">
-          <label for="newUsername" class="block text-gray-700 font-bold mb-2">Username:</label>
-          <input type="text" id="newUsername" placeholder="Choose a username" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-300">
+    <main class="container mx-auto mt-24 p-4">
+        <div id="main-page" class="max-w-md mx-auto">
+            <div class="bg-white p-8 rounded-lg shadow-md text-center slide-in-bottom">
+                <h2 class="text-2xl font-bold mb-6 text-indigo-600">Welcome to MyTech Solutions</h2>
+                <p class="mb-6">Empower your workforce with our cutting-edge employee management system.</p>
+                <button onclick="showLoginPage()" class="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-300 mr-4">Login</button>
+                <button onclick="showSignupPage()" class="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">Sign Up</button>
+            </div>
         </div>
-        <div class="mb-4">
-          <label for="newPassword" class="block text-gray-700 font-bold mb-2">Password:</label>
-          <input type="password" id="newPassword" placeholder="Choose a password" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-300">
+
+        <div id="login-page" class="max-w-md mx-auto hidden">
+            <div class="bg-white p-8 rounded-lg shadow-md slide-in-bottom">
+                <h2 class="text-2xl font-bold mb-6 text-indigo-600">Login</h2>
+                <form id="loginForm">
+                    <div class="mb-4">
+                        <label for="username" class="block text-gray-700 font-bold mb-2">Username:</label>
+                        <input type="text" id="username" placeholder="Enter username" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-300">
+                    </div>
+                    <div class="mb-4">
+                        <label for="password" class="block text-gray-700 font-bold mb-2">Password:</label>
+                        <input type="password" id="password" placeholder="Enter password" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-300">
+                    </div>
+                    <div class="mb-6">
+                        <label for="role" class="block text-gray-700 font-bold mb-2">Role:</label>
+                        <select id="role" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-300">
+                            <option value="admin">Admin</option>
+                            <option value="employee">Employee</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-300">Login</button>
+                </form>
+                <p id="login-message" class="mt-4 text-red-500 text-center"></p>
+            </div>
         </div>
-        <div class="mb-4">
-          <label for="newEmail" class="block text-gray-700 font-bold mb-2">Email:</label>
-          <input type="email" id="newEmail" placeholder="Enter your email" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-300">
+
+        <div id="signup-page" class="max-w-md mx-auto hidden">
+            <div class="bg-white p-8 rounded-lg shadow-md slide-in-bottom">
+                <h2 class="text-2xl font-bold mb-6 text-indigo-600">Sign Up</h2>
+                <form id="signupForm">
+                    <div class="mb-4">
+                        <label for="newUsername" class="block text-gray-700 font-bold mb-2">Username:</label>
+                        <input type="text" id="newUsername" placeholder="Choose a username" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-300">
+                    </div>
+                    <div class="mb-4">
+                        <label for="newPassword" class="block text-gray-700 font-bold mb-2">Password:</label>
+                        <input type="password" id="newPassword" placeholder="Choose a password" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-300">
+                    </div>
+                    <div class="mb-4">
+                        <label for="newEmail" class="block text-gray-700 font-bold mb-2">Email:</label>
+                        <input type="email" id="newEmail" placeholder="Enter your email" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-300">
+                    </div>
+                    <div class="mb-6">
+                        <label for="newRole" class="block text-gray-700 font-bold mb-2">Role:</label>
+                        <select id="newRole" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-300">
+                            <option value="employee">Employee</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">Sign Up</button>
+                </form>
+                <p id="signup-message" class="mt-4 text-red-500 text-center"></p>
+            </div>
         </div>
-        <div class="mb-6">
-          <label for="newRole" class="block text-gray-700 font-bold mb-2">Role:</label>
-          <select id="newRole" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-300">
-            <option value="employee">Employee</option>
-          </select>
+
+        <div id="admin-dashboard" class="hidden">
+            <h2 class="text-3xl font-bold mb-6 text-indigo-600">Admin Dashboard</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+                <div class="bg-white p-4 rounded-lg shadow hover-scale transition-transform">
+                    <p class="text-lg font-semibold">Total Teams: <span id="total-teams" class="text-indigo-600"></span></p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow hover-scale transition-transform">
+                    <p class="text-lg font-semibold">Total Members: <span id="total-members" class="text-indigo-600"></span></p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow hover-scale transition-transform">
+                    <p class="text-lg font-semibold">Overall Progress: <span id="overall-progress" class="text-indigo-600"></span>%</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow hover-scale transition-transform">
+                    <p class="text-lg font-semibold">Active Projects: <span id="active-projects" class="text-indigo-600"></span></p>
+                </div>
+            </div>
+            <div class="flex flex-wrap gap-4 mb-6">
+                <button id="viewAttendance" class="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">View Attendance</button>
+                <button id="assignTask" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300">Assign Task</button>
+                <button id="generateReport" class="bg-purple-500 text-white py-2 px-4 rounded-md hover:bg-purple-600 transition duration-300">Generate Report</button>
+                <button id="manageTeams" class="bg-yellow-500 text-white py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-300">Manage Teams</button>
+            </div>
+            <div id="teams" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
-        <button type="submit" class="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">Sign Up</button>
-      </form>
-      <p id="signup-message" class="mt-4 text-red-500 text-center"></p>
-    </div>
-  </div>
 
-  <div id="admin-dashboard" class="container mx-auto mt-10 p-4 sm:p-6 bg-white rounded-lg shadow-md hidden">
-    <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-indigo-600">Admin Dashboard</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
-      <div class="bg-indigo-100 p-4 rounded-lg hover-scale transition-transform">
-        <p class="text-lg font-semibold">Total Teams: <span id="total-teams" class="text-indigo-600"></span></p>
-      </div>
-      <div class="bg-indigo-100 p-4 rounded-lg hover-scale transition-transform">
-        <p class="text-lg font-semibold">Total Members: <span id="total-members" class="text-indigo-600"></span></p>
-      </div>
-      <div class="bg-indigo-100 p-4 rounded-lg hover-scale transition-transform">
-        <p class="text-lg font-semibold">Overall Progress: <span id="overall-progress" class="text-indigo-600"></span>%</p>
-      </div>
-    </div>
-    <button id="viewAttendance" class="mb-6 bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">View Attendance</button>
-    <div id="teams" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-    <button id="logoutAdmin" class="mt-8 bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition duration-300">Logout</button>
-  </div>
+        <div id="employee-dashboard" class="hidden">
+            <h2 class="text-3xl font-bold mb-6 text-indigo-600">Employee Dashboard</h2>
+            <div id="employee-info" class="mb-8"></div>
+            <div id="attendance-form" class="mt-8">
+                <h3 class="text-xl font-bold mb-4">Mark Attendance</h3>
+                <form id="markAttendanceForm" class="flex flex-col sm:flex-row items-center">
+                    <label for="attendanceDate" class="block text-gray-700 font-bold mb-2 sm:mb-0 sm:mr-4">Date:</label>
+                    <input type="date" id="attendanceDate" required class="w-full sm:w-64 px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-300 mb-4 sm:mb-0 sm:mr-4">
+                    <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">Mark Present</button>
+                </form>
+            </div>
+            <div id="task-list" class="mt-8">
+                <h3 class="text-xl font-bold mb-4">Assigned Tasks</h3>
+                <ul id="employee-tasks" class="space-y-2"></ul>
+            </div>
+        </div>
+    </main>
 
-  <div id="employee-dashboard" class="container mx-auto mt-10 p-4 sm:p-6 bg-white rounded-lg shadow-md hidden">
-    <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-indigo-600">Employee Dashboard</h2>
-    <div id="employee-info" class="mb-8"></div>
-    <div id="attendance-form" class="mt-8">
-      <h3 class="text-xl font-bold mb-4">Mark Attendance</h3>
-      <form id="markAttendanceForm" class="flex flex-col sm:flex-row items-center">
-        <label for="attendanceDate" class="block text-gray-700 font-bold mb-2 sm:mb-0 sm:mr-4">Date:</label>
-        <input type="date" id="attendanceDate" required class="w-full sm:w-64 px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-300 mb-4 sm:mb-0 sm:mr-4">
-        <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">Mark Present</button>
-      </form>
+    <!-- Modals -->
+    <div id="attendance-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden modal">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 shadow-lg rounded-md bg-white modal-content">
+            <div class="mt-3">
+                <h3 class="text-2xl font-bold text-indigo-600 mb-4">Attendance Records</h3>
+                <div id="attendance-records" class="mt-2"></div>
+                <button id="closeAttendance" class="mt-6 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-300">Close</button>
+            </div>
+        </div>
     </div>
-    <button id="logoutEmployee" class="mt-8 bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition duration-300">Logout</button>
-  </div>
 
-  <div id="attendance-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
-    <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 shadow-lg rounded-md bg-white">
-      <div class="mt-3 text-center">
-        <h3 class="text-2xl font-bold text-indigo-600 mb-4">Attendance Records</h3>
-        <div id="attendance-records" class="mt-2 text-left"></div>
-        <button id="closeAttendance" class="mt-6 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-300">Close</button>
-      </div>
+    <div id="assign-task-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden modal">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 shadow-lg rounded-md bg-white modal-content">
+            <div class="mt-3">
+                <h3 class="text-2xl font-bold text-indigo-600 mb-4">Assign Task</h3>
+                <form id="assignTaskForm">
+                    <div class="mb-4">
+                        <label for="taskEmployee" class="block text-gray-700 font-bold mb-2">Employee:</label>
+                        <select id="taskEmployee" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-300">
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="taskDescription" class="block text-gray-700 font-bold mb-2">Task Description:</label>
+                        <textarea id="taskDescription" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-300" rows="3"></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label for="taskDeadline" class="block text-gray-700
+                        font-bold mb-2">Deadline:</label>
+                        <input type="date" id="taskDeadline" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-300">
+                    </div>
+                    <div class="mb-4">
+                        <label for="taskPriority" class="block text-gray-700 font-bold mb-2">Priority:</label>
+                        <select id="taskPriority" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-300">
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300">Assign Task</button>
+                </form>
+                <button id="closeAssignTask" class="mt-6 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-300">Close</button>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <script>
-    // Teams and Members Data
-    const teams = [
-      {
+    <div id="manage-teams-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden modal">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 shadow-lg rounded-md bg-white modal-content">
+            <div class="mt-3">
+                <h3 class="text-2xl font-bold text-indigo-600 mb-4">Manage Teams</h3>
+                <div id="teams-list" class="mb-6"></div>
+                <form id="addTeamForm" class="mb-6">
+                    <h4 class="text-xl font-bold mb-4">Add New Team</h4>
+                    <div class="mb-4">
+                        <label for="newTeamName" class="block text-gray-700 font-bold mb-2">Team Name:</label>
+                        <input type="text" id="newTeamName" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-300">
+                    </div>
+                    <div class="mb-4">
+                        <label for="newTeamLeader" class="block text-gray-700 font-bold mb-2">Team Leader:</label>
+                        <select id="newTeamLeader" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-300">
+                        </select>
+                    </div>
+                    <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">Add Team</button>
+                </form>
+                <button id="closeManageTeams" class="mt-6 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-300">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+      // Data
+let teams = [
+    {
         name: "Team Alpha",
         leader: "Alice",
         members: [
-          { name: "Alice", role: "Developer", overallProgress: 80, task: "Project A" },
-          { name: "Bob", role: "Designer", overallProgress: 60, task: "Project B" },
-          { name: "Charlie", role: "Tester", overallProgress: 50, task: "Project C" },
-          { name: "Diana", role: "Developer", overallProgress: 90, task: "Project D" },
+            { name: "Alice", role: "Developer", overallProgress: 80, task: "Project A" },
+            { name: "Bob", role: "Designer", overallProgress: 60, task: "Project B" },
+            { name: "Charlie", role: "Tester", overallProgress: 50, task: "Project C" },
+            { name: "Diana", role: "Developer", overallProgress: 90, task: "Project D" },
         ],
         activeProjects: 3,
-      },
-      {
+    },
+    {
         name: "Team Beta",
         leader: "Harry",
         members: [
-          { name: "Eve", role: "Developer", overallProgress: 75, task: "Project E" },
-          { name: "Frank", role: "Tester", overallProgress: 40, task: "Project F" },
-          { name: "Grace", role: "Designer", overallProgress: 65, task: "Project G" },
-          { name: "Harry", role: "Developer", overallProgress: 85, task: "Project H" },
+            { name: "Eve", role: "Developer", overallProgress: 75, task: "Project E" },
+            { name: "Frank", role: "Tester", overallProgress: 40, task: "Project F" },
+            { name: "Grace", role: "Designer", overallProgress: 65, task: "Project G" },
+            { name: "Harry", role: "Developer", overallProgress: 85, task: "Project H" },
         ],
         activeProjects: 2,
-      },
-      {
+    },
+    {
         name: "Team Gamma",
         leader: "Jatin",
         members: [
-          { name: "Jatin", role: "Developer", overallProgress: 90, task: "Project I" },
-          { name: "Jack", role: "Designer", overallProgress: 80, task: "Project J" },
-          { name: "Kate", role: "Tester", overallProgress: 70, task: "Project K" },
-          { name: "Leo", role: "Developer", overallProgress: 85, task: "Project L" },
+            { name: "Jatin", role: "Developer", overallProgress: 90, task: "Project I" },
+            { name: "Jack", role: "Designer", overallProgress: 80, task: "Project J" },
+            { name: "Kate", role: "Tester", overallProgress: 70, task: "Project K" },
+            { name: "Leo", role: "Developer", overallProgress: 85, task: "Project L" },
         ],
         activeProjects: 4,
-      },
-      {
+    },
+    {
         name: "Team Delta",
         leader: "Nikhil",
         members: [
@@ -182,270 +287,437 @@
         ],
         activeProjects: 3,
       },
-    ];
+];
 
-    // Attendance Data (simulated with some previous records)
-    let attendanceData = {
-      "2024-10-05": ["Alice", "Bob", "Charlie", "Diana", "Eve", "Frank", "Grace", "Harry"],
-      "2024-10-06": ["Alice", "Charlie", "Diana", "Eve", "Grace", "Harry", "Jatin", "Jack", "Kate"],
-      "2024-10-07": ["Bob", "Charlie", "Diana", "Frank", "Harry", "Jatin", "Jack", "Leo", "John", "Oscar"]
-    };
+let attendanceData = {
+    "2024-10-05": ["Alice", "Bob", "Charlie", "Diana", "Eve", "Frank", "Grace", "Harry"],
+    "2024-10-06": ["Alice", "Charlie", "Diana", "Eve", "Grace", "Harry", "Jatin", "Jack", "Kate"],
+    "2024-10-07": ["Bob", "Charlie", "Diana", "Frank", "Harry", "Jatin", "Jack", "Leo", "John", "Oscar"]
+};
 
-    // User credentials (including new signups)
-    let userCredentials = {
-      admin: { username: "admin", password: "admin123", role: "admin" },
-      Alice: { username: "Alice", password: "alice123", role: "employee", email: "alice@example.com" },
-      Bob: { username: "Bob", password: "bob123", role: "employee", email: "bob@example.com" },
-      Charlie: { username: "Charlie", password: "charlie123", role: "employee", email: "charlie@example.com" },
-      Diana: { username: "Diana", password: "diana123", role: "employee", email: "diana@example.com" },
-      Eve: { username: "Eve", password: "eve123", role: "employee", email: "eve@example.com" },
-      Frank: { username: "Frank", password: "frank123", role: "employee", email: "frank@example.com" },
-      Grace: { username: "Grace", password: "grace123", role: "employee", email: "grace@example.com" },
-      Harry: { username: "Harry", password: "harry123", role: "employee", email: "harry@example.com" },
-      Jatin: { username: "Jatin", password: "jatin123", role: "employee", email: "jatin@example.com" },
-      Jack: { username: "Jack", password: "jack123", role: "employee", email: "jack@example.com" },
-      Kate: { username: "Kate", password: "kate123", role: "employee", email: "kate@example.com" },
-      Leo: { username: "Leo", password: "leo123", role: "employee", email: "leo@example.com" },
-      John: { username: "John", password: "john123", role: "employee", email: "john@example.com" },
-      Oscar: { username: "Oscar", password: "oscar123", role: "employee", email: "oscar@example.com" },
-      Pam: { username: "Pam", password: "pam123", role: "employee", email: "pam@example.com" },
-      Nikhil: { username: "Nikhil", password: "nikhil123", role: "employee", email: "nikhil@example.com" }
-    };
+let userCredentials = {
+    admin: { username: "admin", password: "admin123", role: "admin" },
+    Alice: { username: "Alice", password: "alice123", role: "employee", email: "alice@example.com" },
+    Bob: { username: "Bob", password: "bob123", role: "employee", email: "bob@example.com" },
+    Charlie: { username: "Charlie", password: "charlie123", role: "employee", email: "charlie@example.com" },
+    Diana: { username: "Diana", password: "diana123", role: "employee", email: "diana@example.com" },
+    Eve: { username: "Eve", password: "eve123", role: "employee", email: "eve@example.com" },
+    Frank: { username: "Frank", password: "frank123", role: "employee", email: "frank@example.com" },
+    Grace: { username: "Grace", password: "grace123", role: "employee", email: "grace@example.com" },
+    Harry: { username: "Harry", password: "harry123", role: "employee", email: "harry@example.com" },
+    Jatin: { username: "Jatin", password: "jatin123", role: "employee", email: "jatin@example.com" },
+    Jack: { username: "Jack", password: "jack123", role: "employee", email: "jack@example.com" },
+    Kate: { username: "Kate", password: "kate123", role: "employee", email: "kate@example.com" },
+    Leo: { username: "Leo", password: "leo123", role: "employee", email: "leo@example.com" },
+    John: { username: "John", password: "john123", role: "employee", email: "john@example.com" },
+    Oscar: { username: "Oscar", password: "oscar123", role: "employee", email: "oscar@example.com" },
+    Pam: { username: "Pam", password: "pam123", role: "employee", email: "pam@example.com" },
+    Nikhil: { username: "Nikhil", password: "nikhil123", role: "employee", email: "nikhil@example.com" }
+};
 
-    // Login Functionality
-    const loginForm = document.getElementById("loginForm");
-    loginForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
-      const role = document.getElementById("role").value;
+let tasks = [];
 
-      const user = userCredentials[username];
-      if (user && user.password === password && user.role === role) {
-        if (role === "admin") {
-          showAdminDashboard();
-        } else {
-          showEmployeeDashboard(username);
-        }
-      } else {
-        document.getElementById("login-message").innerText = "Invalid credentials!";
-      }
+// Utility Functions
+function hideAllPages() {
+    document.getElementById("main-page").classList.add("hidden");
+    document.getElementById("login-page").classList.add("hidden");
+    document.getElementById("signup-page").classList.add("hidden");
+    document.getElementById("admin-dashboard").classList.add("hidden");
+    document.getElementById("employee-dashboard").classList.add("hidden");
+    document.getElementById("auth-buttons").classList.remove("hidden");
+    document.getElementById("logout-button").classList.add("hidden");
+    document.getElementById("main-nav").classList.add("hidden");
+}
+
+function showLoginPage() {
+    hideAllPages();
+    document.getElementById("login-page").classList.remove("hidden");
+}
+
+function showSignupPage() {
+    hideAllPages();
+    document.getElementById("signup-page").classList.remove("hidden");
+}
+
+function showAdminDashboard() {
+    hideAllPages();
+    document.getElementById("admin-dashboard").classList.remove("hidden");
+    document.getElementById("auth-buttons").classList.add("hidden");
+    document.getElementById("logout-button").classList.remove("hidden");
+    document.getElementById("main-nav").classList.remove("hidden");
+    updateAdminDashboard();
+}
+
+function showEmployeeDashboard(username) {
+    hideAllPages();
+    document.getElementById("employee-dashboard").classList.remove("hidden");
+    document.getElementById("auth-buttons").classList.add("hidden");
+    document.getElementById("logout-button").classList.remove("hidden");
+    document.getElementById("main-nav").classList.remove("hidden");
+    updateEmployeeDashboard(username);
+}
+
+function logout() {
+    hideAllPages();
+    document.getElementById("main-page").classList.remove("hidden");
+}
+
+function calculateOverallProgress() {
+    let totalProgress = 0;
+    let totalMembers = 0;
+    teams.forEach(team => {
+        team.members.forEach(member => {
+            totalProgress += member.overallProgress;
+            totalMembers++;
+        });
     });
+    return Math.round(totalProgress / totalMembers);
+}
 
-    // Signup Functionality
-    const signupForm = document.getElementById("signupForm");
-    signupForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const username = document.getElementById("newUsername").value;
-      const password = document.getElementById("newPassword").value;
-      const email = document.getElementById("newEmail").value;
-      const role = document.getElementById("newRole").value;
+function calculateTotalEmployees() {
+    return teams.reduce((sum, team) => sum + team.members.length, 0);
+}
 
-      if (userCredentials[username]) {
-        document.getElementById("signup-message").innerText = "Username already exists!";
-      } else {
-        userCredentials[username] = { username, password, role, email };
-        alert(`Account created for ${username} as ${role}`);
-        showLoginPage();
-      }
-    });
+// Admin Dashboard Functions
+function updateAdminDashboard() {
+    const totalTeams = teams.length;
+    const totalMembers = calculateTotalEmployees();
+    const overallProgress = calculateOverallProgress();
+    const totalActiveProjects = teams.reduce((sum, team) => sum + team.activeProjects, 0);
 
-    function showAdminDashboard() {
-      hideAllPages();
-      document.getElementById("admin-dashboard").classList.remove("hidden");
+    document.getElementById("total-teams").innerText = totalTeams;
+    document.getElementById("total-members").innerText = totalMembers;
+    document.getElementById("overall-progress").innerText = overallProgress;
+    document.getElementById("active-projects").innerText = totalActiveProjects;
 
-      const totalTeams = teams.length;
-      const totalMembers = teams.reduce((sum, team) => sum + team.members.length, 0);
-      const overallProgress = calculateOverallProgress();
+    updateTeamsDisplay();
+}
 
-      document.getElementById("total-teams").innerText = totalTeams;
-      document.getElementById("total-members").innerText = totalMembers;
-      document.getElementById("overall-progress").innerText = overallProgress;
-
-      const teamsContainer = document.getElementById("teams");
-      teamsContainer.innerHTML = ""; // Clear previous data
-      teams.forEach((team, teamIndex) => {
+function updateTeamsDisplay() {
+    const teamsContainer = document.getElementById("teams");
+    teamsContainer.innerHTML = "";
+    teams.forEach((team, teamIndex) => {
         const teamDiv = document.createElement("div");
-        teamDiv.className = "mb-8 p-4 sm:p-6 bg-gray-50 rounded-lg shadow hover-scale transition-transform";
+        teamDiv.className = "mb-8 p-6 bg-white rounded-lg shadow hover-scale transition-transform";
         teamDiv.innerHTML = `
-          <h3 class="text-xl sm:text-2xl font-bold mb-4 text-indigo-600">${team.name}</h3>
-          <p class="mb-2"><strong>Leader:</strong> ${team.leader}</p>
-          <p class="mb-2"><strong>Active Projects:</strong> ${team.activeProjects}</p>
-          <button onclick="showTeamMembers(${teamIndex})" class="mb-4 bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 transition duration-300">View Members</button>
-          <div id="members-${teamIndex}" class="hidden"></div>
+            <h3 class="text-2xl font-bold mb-4 text-indigo-600">${team.name}</h3>
+            <p class="mb-2"><strong>Leader:</strong> ${team.leader}</p>
+            <p class="mb-2"><strong>Active Projects:</strong> ${team.activeProjects}</p>
+            <button onclick="showTeamMembers(${teamIndex})" class="mb-4 bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 transition duration-300">View Members</button>
+            <div id="members-${teamIndex}" class="hidden"></div>
         `;
         teamsContainer.appendChild(teamDiv);
-      });
+    });
+}
 
-      // Set up attendance view button
-      document.getElementById("viewAttendance").addEventListener("click", showAttendanceModal);
-    }
+function showTeamMembers(teamIndex) {
+    const membersDiv = document.getElementById(`members-${teamIndex}`);
+    const team = teams[teamIndex];
 
-    function showTeamMembers(teamIndex) {
-      const membersDiv = document.getElementById(`members-${teamIndex}`);
-      const team = teams[teamIndex];
-
-      if (membersDiv.classList.contains("hidden")) {
+    if (membersDiv.classList.contains("hidden")) {
         let membersInfo = "<ul class='space-y-2'>";
         team.members.forEach((member, memberIndex) => {
-          membersInfo += `
-            <li class="bg-white p-3 sm:p-4 rounded-md shadow">
-              <strong><a href="javascript:void(0)" onclick="showMemberDetail(${teamIndex}, ${memberIndex})" class="text-indigo-600 hover:underline">${member.name}</a></strong>
-              <p class="text-sm sm:text-base">${member.role} - Progress: ${member.overallProgress}%</p>
-              <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
-                <div class="bg-indigo-600 h-2 rounded-full" style="width: ${member.overallProgress}%"></div>
-              </div>
-            </li>`;
+            membersInfo += `
+                <li class="bg-gray-100 p-4 rounded-md">
+                    <strong>${member.name}</strong> (${member.role})
+                    <p>Progress: ${member.overallProgress}%</p>
+                    <p>Current Task: ${member.task}</p>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                        <div class="bg-indigo-600 h-2.5 rounded-full" style="width: ${member.overallProgress}%"></div>
+                    </div>
+                </li>`;
         });
         membersInfo += "</ul>";
         membersDiv.innerHTML = membersInfo;
         membersDiv.classList.remove("hidden");
-      } else {
+    } else {
         membersDiv.classList.add("hidden");
-      }
     }
+}
 
-    function showMemberDetail(teamIndex, memberIndex) {
-      const member = teams[teamIndex].members[memberIndex];
-      alert(`Name: ${member.name}\nRole: ${member.role}\nTask: ${member.task}\nOverall Progress: ${member.overallProgress}%`);
-    }
+// Employee Dashboard Functions
+function updateEmployeeDashboard(username) {
+    const employeeInfo = document.getElementById("employee-info");
+    employeeInfo.innerHTML = "";
 
-    function showEmployeeDashboard(username) {
-      hideAllPages();
-      document.getElementById("employee-dashboard").classList.remove("hidden");
-
-      const employeeInfo = document.getElementById("employee-info");
-      employeeInfo.innerHTML = ""; // Clear any previous data
-
-      teams.forEach((team) => {
+    teams.forEach((team) => {
         team.members.forEach((member) => {
-          if (member.name.toLowerCase() === username.toLowerCase()) {
-            const employeeDiv = document.createElement("div");
-            employeeDiv.className = "bg-gray-50 p-6 rounded-lg shadow hover-scale transition-transform";
-            employeeDiv.innerHTML = `
-              <h3 class="text-2xl font-bold mb-4 text-indigo-600">${member.name}</h3>
-              <p class="mb-2"><strong>Team:</strong> ${team.name}</p>
-              <p class="mb-2"><strong>Role:</strong> ${member.role}</p>
-              <p class="mb-2"><strong>Task:</strong> ${member.task}</p>
-              <p class="mb-2"><strong>Overall Progress:</strong> ${member.overallProgress}%</p>
-              <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
-                <div class="bg-indigo-600 h-2 rounded-full" style="width: ${member.overallProgress}%"></div>
-              </div>
-            `;
-            employeeInfo.appendChild(employeeDiv);
-          }
+            if (member.name.toLowerCase() === username.toLowerCase()) {
+                const employeeDiv = document.createElement("div");
+                employeeDiv.className = "bg-white p-6 rounded-lg shadow hover-scale transition-transform";
+                employeeDiv.innerHTML = `
+                    <h3 class="text-2xl font-bold mb-4 text-indigo-600">${member.name}</h3>
+                    <p class="mb-2"><strong>Team:</strong> ${team.name}</p>
+                    <p class="mb-2"><strong>Role:</strong> ${member.role}</p>
+                    <p class="mb-2"><strong>Current Task:</strong> ${member.task}</p>
+                    <p class="mb-2"><strong>Overall Progress:</strong> ${member.overallProgress}%</p>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                        <div class="bg-indigo-600 h-2.5 rounded-full" style="width: ${member.overallProgress}%"></div>
+                    </div>
+                `;
+                employeeInfo.appendChild(employeeDiv);
+            }
         });
-      });
-
-      // Set up attendance form
-      const markAttendanceForm = document.getElementById("markAttendanceForm");
-      markAttendanceForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const date = document.getElementById("attendanceDate").value;
-        markAttendance(username, date);
-      });
-    }
-
-    function markAttendance(username, date) {
-      if (!attendanceData[date]) {
-        attendanceData[date] = [];
-      }
-      if (!attendanceData[date].includes(username)) {
-        attendanceData[date].push(username);
-        alert(`Attendance marked for ${username} on ${date}`);
-      } else {
-        alert(`Attendance already marked for ${username} on ${date}`);
-      }
-    }
-
-    function showAttendanceModal() {
-      const modal = document.getElementById("attendance-modal");
-      const recordsContainer = document.getElementById("attendance-records");
-      modal.classList.remove("hidden");
-
-      // Generate attendance records
-      let recordsHTML = "<h4 class='text-xl font-bold mb-4'>Attendance by Date</h4>";
-      for (const [date, employees] of Object.entries(attendanceData)) {
-        const attendancePercentage = (employees.length / calculateTotalEmployees()) * 100;
-        recordsHTML += `
-          <h5 class='text-lg font-semibold mt-4 mb-2'>${date} - Attendance: ${attendancePercentage.toFixed(2)}%</h5>
-          <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700">
-            <div class="bg-blue-600 h-2.5 rounded-full" style="width: ${attendancePercentage}%"></div>
-          </div>
-        `;
-        recordsHTML += "<ul class='list-disc list-inside'>";
-        employees.forEach(employee => {
-          recordsHTML += `<li>${employee}</li>`;
-        });
-        recordsHTML += "</ul>";
-      }
-
-      if (Object.keys(attendanceData).length === 0) {
-        recordsHTML = "<p>No attendance records available.</p>";
-      }
-
-      recordsContainer.innerHTML = recordsHTML;
-
-      // Set up close button
-      document.getElementById("closeAttendance").addEventListener("click", () => {
-        modal.classList.add("hidden");
-      });
-    }
-
-    // Logout functionality
-    document.getElementById("logoutAdmin").addEventListener("click", logout);
-    document.getElementById("logoutEmployee").addEventListener("click", logout);
-
-    function logout() {
-      hideAllPages();
-      document.getElementById("main-page").classList.remove("hidden");
-      document.getElementById("auth-buttons").classList.remove("hidden");
-      document.getElementById("username").value = "";
-      document.getElementById("password").value = "";
-      document.getElementById("login-message").innerText = "";
-    }
-
-    // Helper functions
-    function hideAllPages() {
-      document.getElementById("main-page").classList.add("hidden");
-      document.getElementById("login-page").classList.add("hidden");
-      document.getElementById("signup-page").classList.add("hidden");
-      document.getElementById("admin-dashboard").classList.add("hidden");
-      document.getElementById("employee-dashboard").classList.add("hidden");
-      document.getElementById("auth-buttons").classList.add("hidden");
-    }
-
-    function showLoginPage() {
-      hideAllPages();
-      document.getElementById("login-page").classList.remove("hidden");
-    }
-
-    function showSignupPage() {
-      hideAllPages();
-      document.getElementById("signup-page").classList.remove("hidden");
-    }
-
-    function calculateOverallProgress() {
-      let totalProgress = 0;
-      let totalMembers = 0;
-      teams.forEach(team => {
-        team.members.forEach(member => {
-          totalProgress += member.overallProgress;
-          totalMembers++;
-        });
-      });
-      return Math.round(totalProgress / totalMembers);
-    }
-
-    function calculateTotalEmployees() {
-      return teams.reduce((sum, team) => sum + team.members.length, 0);
-    }
-
-    // Initialize date input to today's date
-    document.addEventListener("DOMContentLoaded", function() {
-      const today = new Date().toISOString().split('T')[0];
-      document.getElementById("attendanceDate").value = today;
     });
-  </script>
+
+    displayEmployeeTasks(username);
+}
+
+function displayEmployeeTasks(username) {
+    const taskList = document.getElementById("employee-tasks");
+    taskList.innerHTML = "";
+
+    const employeeTasks = tasks.filter(task => task.employee.toLowerCase() === username.toLowerCase());
+
+    if (employeeTasks.length === 0) {
+        taskList.innerHTML = "<li class='bg-white p-4 rounded-md shadow'>No tasks assigned yet.</li>";
+    } else {
+        employeeTasks.forEach(task => {
+            const taskItem = document.createElement("li");
+            taskItem.className = "bg-white p-4 rounded-md shadow";
+            taskItem.innerHTML = `
+                <p><strong>Task:</strong> ${task.description}</p>
+                <p><strong>Deadline:</strong> ${task.deadline}</p>
+                <p><strong>Priority:</strong> ${task.priority}</p>
+                <p><strong>Status:</strong> ${task.status}</p>
+            `;
+            taskList.appendChild(taskItem);
+        });
+    }
+}
+
+// Event Listeners
+document.getElementById("loginForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    const role = document.getElementById("role").value;
+
+    const user = userCredentials[username];
+    if (user && user.password === password && user.role === role) {
+        if (role === "admin") {
+            showAdminDashboard();
+        } else {
+            showEmployeeDashboard(username);
+        }
+    } else {
+        document.getElementById("login-message").innerText = "Invalid credentials. Please try again.";
+    }
+});
+
+document.getElementById("signupForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const username = document.getElementById("newUsername").value;
+    const password = document.getElementById("newPassword").value;
+    const email = document.getElementById("newEmail").value;
+    const role = document.getElementById("newRole").value;
+
+    if (userCredentials[username]) {
+        document.getElementById("signup-message").innerText = "Username already exists. Please choose a different one.";
+    } else {
+        userCredentials[username] = { username, password, role, email };
+        // document.getElementById("signup-message").innerText = "Account created successfully. You can now log in.";
+        // document.getElementById("signupForm").reset();
+        alert(`Account created for ${username} as ${role}`);
+        showLoginPage();
+    }
+});
+
+document.getElementById("viewAttendance").addEventListener("click", () => {
+    const modal = document.getElementById("attendance-modal");
+    const recordsContainer = document.getElementById("attendance-records");
+    recordsContainer.innerHTML = "";
+
+    for (const [date, employees] of Object.entries(attendanceData)) {
+        const dateDiv = document.createElement("div");
+        dateDiv.className = "mb-4";
+        dateDiv.innerHTML = `
+            <h4 class="font-bold">${date}</h4>
+            <p>Present: ${employees.join(", ")}</p>
+        `;
+        recordsContainer.appendChild(dateDiv);
+    }
+
+    modal.classList.remove("hidden");
+    modal.classList.add("show");
+});
+
+document.getElementById("closeAttendance").addEventListener("click", () => {
+    const modal = document.getElementById("attendance-modal");
+    modal.classList.add("hidden");
+    modal.classList.remove("show");
+});
+
+document.getElementById("assignTask").addEventListener("click", () => {
+    const modal = document.getElementById("assign-task-modal");
+    const employeeSelect = document.getElementById("taskEmployee");
+    employeeSelect.innerHTML = "";
+
+    teams.forEach(team => {
+        team.members.forEach(member => {
+            const option = document.createElement("option");
+            option.value = member.name;
+            option.textContent = `${member.name} (${team.name})`;
+            employeeSelect.appendChild(option);
+        });
+    });
+
+    modal.classList.remove("hidden");
+    modal.classList.add("show");
+});
+
+document.getElementById("closeAssignTask").addEventListener("click", () => {
+    const modal = document.getElementById("assign-task-modal");
+    modal.classList.add("hidden");
+    modal.classList.remove("show");
+});
+
+document.getElementById("assignTaskForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const employee = document.getElementById("taskEmployee").value;
+    const description = document.getElementById("taskDescription").value;
+    const deadline = document.getElementById("taskDeadline").value;
+    const priority = document.getElementById("taskPriority").value;
+
+    tasks.push({
+        employee,
+        description,
+        deadline,
+        priority,
+        status: "Assigned"
+    });
+
+    document.getElementById("assignTaskForm").reset();
+    document.getElementById("assign-task-modal").classList.add("hidden");
+    document.getElementById("assign-task-modal").classList.remove("show");
+});
+
+document.getElementById("generateReport").addEventListener("click", () => {
+    const report = `
+        Total Teams: ${teams.length}
+        Total Employees: ${calculateTotalEmployees()}
+        Overall Progress: ${calculateOverallProgress()}%
+        Active Projects: ${teams.reduce((sum, team) => sum + team.activeProjects, 0)}
+
+        Team
+        Breakdown:
+        ${teams.map(team => `
+            ${team.name}:
+            - Leader: ${team.leader}
+            - Members: ${team.members.length}
+            - Active Projects: ${team.activeProjects}
+            - Team Progress: ${Math.round(team.members.reduce((sum, member) => sum + member.overallProgress, 0) / team.members.length)}%
+        `).join('\n')}
+
+        Task Summary:
+        ${tasks.map(task => `
+            Employee: ${task.employee}
+            Description: ${task.description}
+            Deadline: ${task.deadline}
+            Priority: ${task.priority}
+            Status: ${task.status}
+        `).join('\n')}
+    `;
+
+    const reportWindow = window.open('', '_blank');
+    reportWindow.document.write('<pre>' + report + '</pre>');
+    reportWindow.document.close();
+});
+
+document.getElementById("manageTeams").addEventListener("click", () => {
+    const modal = document.getElementById("manage-teams-modal");
+    updateTeamsList();
+    updateEmployeeDropdown();
+    modal.classList.remove("hidden");
+    modal.classList.add("show");
+});
+
+document.getElementById("closeManageTeams").addEventListener("click", () => {
+    const modal = document.getElementById("manage-teams-modal");
+    modal.classList.add("hidden");
+    modal.classList.remove("show");
+});
+
+function updateTeamsList() {
+    const teamsList = document.getElementById("teams-list");
+    teamsList.innerHTML = "";
+
+    teams.forEach((team, index) => {
+        const teamItem = document.createElement("div");
+        teamItem.className = "mb-4 p-4 bg-gray-100 rounded-md";
+        teamItem.innerHTML = `
+            <h4 class="font-bold">${team.name}</h4>
+            <p>Leader: ${team.leader}</p>
+            <p>Members: ${team.members.map(m => m.name).join(", ")}</p>
+            <button onclick="removeTeam(${index})" class="mt-2 bg-red-500 text-white py-1 px-2 rounded-md hover:bg-red-600 transition duration-300">Remove Team</button>
+        `;
+        teamsList.appendChild(teamItem);
+    });
+}
+
+function updateEmployeeDropdown() {
+    const leaderSelect = document.getElementById("newTeamLeader");
+    leaderSelect.innerHTML = "";
+    
+    const allEmployees = teams.flatMap(team => team.members.map(member => member.name));
+    const uniqueEmployees = [...new Set(allEmployees)];
+
+    uniqueEmployees.forEach(employee => {
+        const option = document.createElement("option");
+        option.value = employee;
+        option.textContent = employee;
+        leaderSelect.appendChild(option);
+    });
+}
+
+function removeTeam(index) {
+    teams.splice(index, 1);
+    updateTeamsList();
+    updateAdminDashboard();
+}
+
+document.getElementById("addTeamForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const teamName = document.getElementById("newTeamName").value;
+    const teamLeader = document.getElementById("newTeamLeader").value;
+
+    const newTeam = {
+        name: teamName,
+        leader: teamLeader,
+        members: [{ name: teamLeader, role: "Team Leader", overallProgress: 0, task: "None" }],
+        activeProjects: 0
+    };
+
+    teams.push(newTeam);
+    updateTeamsList();
+    updateAdminDashboard();
+    document.getElementById("addTeamForm").reset();
+});
+
+document.getElementById("markAttendanceForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const date = document.getElementById("attendanceDate").value;
+    const username = document.querySelector("#employee-info h3").textContent;
+
+    if (!attendanceData[date]) {
+        attendanceData[date] = [];
+    }
+
+    if (!attendanceData[date].includes(username)) {
+        attendanceData[date].push(username);
+        alert("Attendance marked successfully for " + date);
+    } else {
+        alert("Attendance already marked for this date");
+    }
+
+    document.getElementById("markAttendanceForm").reset();
+});
+
+// Initialize the application
+document.addEventListener("DOMContentLoaded", () => {
+    hideAllPages();
+    document.getElementById("main-page").classList.remove("hidden");
+});
+    </script>
 </body>
 </html>
